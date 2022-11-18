@@ -25,7 +25,7 @@ public class Paddle extends GameObject implements Settings {
     private double deltaX;
 
     // Constructor(s) of the class.
-    public Paddle(){
+    Paddle(){
 
         this.graphics = new Rectangle(DEFAULT_PADDLE_WIDTH, DEFAULT_PADDLE_HEIGHT);
         this.graphics.setFill(DEFAULT_PADDLE_COLOUR);
@@ -46,12 +46,17 @@ public class Paddle extends GameObject implements Settings {
     }
 
     // Getters of the class.
+    public static double getSPEED() {return Paddle.SPEED;}
+
+    public double getDeltaX() {return this.deltaX;}
+
     public Rectangle getGraphics() {return this.graphics;}
 
 
     // Setters of the class.
 
     // Public non-static methods of the unit.
+    public void reset() {this.deltaX = 0;}
     public void move(KeyCode keyCode){
         if(keyCode == KeyCode.A)
             this.deltaX -= SPEED;
@@ -73,6 +78,7 @@ public class Paddle extends GameObject implements Settings {
 
 
     // Public static methods of the unit.
+    public static Paddle newDefault() {return new Paddle();}
 
     // Private methods of the unit.
 

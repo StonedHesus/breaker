@@ -1,16 +1,16 @@
 // The package in which the current Java compilation unit is to be found.
 package breaker.game.breaker;
 // Imports from existing Java libraries, classes and interfaces.
+import breaker.game.scenes.game.Game;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 // Import from custom libraries, classes and interfaces.
-import breaker.game.components.paddle.Paddle;
 import breaker.game.settings.Settings;
+
 
 /**
  * @author Andrei-Paul Ionescu
@@ -19,9 +19,9 @@ public class Breaker extends Application implements Settings {
     // Static values/constants of the class.
 
     // Fields/attributes of the class.
-    private Paddle paddle;
-    private double deltaTime = 0;
     private BorderPane root;
+
+    private AnimationTimer mainLoop;
 
     // Constructor(s) of the class.
 
@@ -30,13 +30,11 @@ public class Breaker extends Application implements Settings {
     // Setters of the class.
 
     // Public non-static methods of the unit.
-
-
     @Override
     public void init() throws Exception {
         super.init();
 
-        this.paddle = new Paddle();
+        this.root = new BorderPane();
     }
 
     /**
@@ -56,49 +54,40 @@ public class Breaker extends Application implements Settings {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.root = new BorderPane();
-
-        Scene scene = new Scene(root, DEFAULT_GAME_WINDOW_WIDTH, DEFAULT_GAME_WINDOW_HEIGHT);
-
-        scene.setOnKeyPressed((key) -> {
-            paddle.move(key.getCode());
-        });
-
-        scene.setOnKeyReleased((key) ->{
-
-            if(key.getCode() == KeyCode.A || key.getCode() == KeyCode.D)
-                paddle.update(this.deltaTime);
-        });
-
-
-        this.paddle.draw(root);
+        Game game = new Game(root, DEFAULT_GAME_WINDOW_WIDTH, DEFAULT_GAME_WINDOW_HEIGHT);
 
         primaryStage.setTitle("Breaker");
         primaryStage.setResizable(true);
-        primaryStage.setScene(scene);
         primaryStage.show();
-        this.animate();
-    }
+        primaryStage.setScene(game);
+        primaryStage.centerOnScreen();
 
-    public void animate() {
-        new AnimationTimer() {
-            long last = 0;
+        this.mainLoop = new AnimationTimer() {
 
             @Override
             public void handle(long now) {
-                if (last == 0) { // ignore the first tick, just compute the first deltaT
-                    last = now;
-                    return;
-                }
-                deltaTime = ((now - last) * 1.0e-9); // convert nanoseconds to seconds
-                last = now;
+
+
+                Scene scene = primaryStage.getScene();
+
+                if(scene instanceof breaker.game.scenes.model.Scene)
+                    ((breaker.game.scenes.model.Scene) scene).tick();
+
+
             }
-        }.start();
+        };
+
+        this.mainLoop.start();
     }
 
-
+    @Override
+    public void stop() throws Exception{
+        super.stop();
+        mainLoop.stop();
+    }
 
     // Public static methods of the unit.
+    public static void main(String[] args) {launch(args);}
 
     // Private methods of the unit.
 
