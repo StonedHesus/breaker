@@ -4,9 +4,11 @@ package breaker.game.scenes.game;
 import javafx.application.Application;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 // Import from custom libraries, classes and interfaces.
 import breaker.game.scenes.model.Scene;
@@ -40,8 +42,7 @@ public class Game extends Scene {
     // Public non-static methods of the unit.
     @Override
     public void tick (){
-
-
+        paddle.collidesWithScreenBounds();
     }
 
     // Public static methods of the unit.
@@ -56,6 +57,8 @@ public class Game extends Scene {
 
         children.add(game.paddle.getGraphics());
         game.setFill(Color.WHITE);
+
+        game.setOnKeyPressed(event -> game.paddle.move(event.getCode()));
 
         return game;
     }

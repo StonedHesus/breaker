@@ -16,7 +16,7 @@ import javafx.scene.shape.Rectangle;
 public class Paddle extends GameObject implements Settings {
 
     // Static values/constants of the class.
-    private static double SPEED = 40.0;
+    private static double SPEED = 5.0;
 
     // Fields/attributes of the class.
     private Rectangle graphics;
@@ -56,19 +56,22 @@ public class Paddle extends GameObject implements Settings {
     // Setters of the class.
 
     // Public non-static methods of the unit.
+    public boolean collidesWithScreenBounds() {return isCollidingWithLeftBoundary() || isCollidingWithRightBoundary();}
+
     public void reset() {this.deltaX = 0;}
     public void move(KeyCode keyCode){
         if(keyCode == KeyCode.A)
-            this.deltaX -= SPEED;
+            this.graphics.setX(this.graphics.getX() - SPEED);
 
         if(keyCode == KeyCode.D)
-            this.deltaX += SPEED;
+            this.graphics.setX(this.graphics.getX() + SPEED);
     }
 
     @Override
     public void draw(Pane target) {target.getChildren().add(this.graphics);}
 
     @Override
+    @Deprecated
     public void update(double deltaTime) {
 
         this.coordinates.add(this.deltaX * deltaTime, 0);
@@ -81,6 +84,10 @@ public class Paddle extends GameObject implements Settings {
     public static Paddle newDefault() {return new Paddle();}
 
     // Private methods of the unit.
+    private boolean isCollidingWithLeftBoundary() {return Math.max(0, this.graphics.getX()) <= 0;}
+
+    private boolean isCollidingWithRightBoundary() {return Math.min(this.graphics.getX(), DEFAULT_GAME_WINDOW_WIDTH) > DEFAULT_GAME_WINDOW_WIDTH - DEFAULT_PADDLE_WIDTH;}
+
 
     // Nested class(es)/membered type(s).
 }
