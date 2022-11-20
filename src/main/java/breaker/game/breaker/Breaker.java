@@ -4,6 +4,7 @@ package breaker.game.breaker;
 import breaker.game.scenes.game.Game;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -23,9 +24,13 @@ public class Breaker extends Application implements Settings {
 
     private AnimationTimer mainLoop;
 
+    private Dimension2D currentDimensions;
     // Constructor(s) of the class.
 
     // Getters of the class.
+    public double getWidth() {return this.currentDimensions.getWidth();}
+
+    public double getHeight() {return this.currentDimensions.getHeight();}
 
     // Setters of the class.
 
@@ -35,6 +40,8 @@ public class Breaker extends Application implements Settings {
         super.init();
 
         this.root = new BorderPane();
+
+        this.currentDimensions = new Dimension2D(DEFAULT_GAME_WINDOW_WIDTH, DEFAULT_GAME_WINDOW_HEIGHT);
     }
 
     /**
@@ -54,7 +61,7 @@ public class Breaker extends Application implements Settings {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Game game = new Game(root, DEFAULT_GAME_WINDOW_WIDTH, DEFAULT_GAME_WINDOW_HEIGHT);
+        Game game = Game.newGameSceneFor(this);
 
         primaryStage.setTitle("Breaker");
         primaryStage.setResizable(true);
