@@ -22,7 +22,7 @@ public class PaddleTest {
 
     @BeforeAll
     public static void init(){
-        PaddleTest.paddle = new Paddle();
+        PaddleTest.paddle = Paddle.newDefault();
     }
 
     @BeforeEach

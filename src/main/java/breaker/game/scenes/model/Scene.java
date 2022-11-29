@@ -41,7 +41,7 @@ public abstract class Scene extends javafx.scene.Scene{
     // Setters of the class.
 
     // Public non-static methods of the unit.
-    public abstract void tick();
+    public abstract void tick(double deltaTime);
     // Public static methods of the unit.
 
     // Private methods of the unit.

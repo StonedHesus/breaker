@@ -17,7 +17,13 @@ public interface Settings {
     double DEFAULT_ARC_WIDTH = 30;
     double DEFAULT_ARC_HEIGHT = 20;
 
+    // Settings concerning the ball game object.
+    double DEFAULT_BALL_RADIUS = 15;
+    Color DEFAULT_BALL_COLOUR = Color.DARKGOLDENROD;
+
     // Settings which concern the game window.
     double DEFAULT_GAME_WINDOW_WIDTH = 1280;
     double DEFAULT_GAME_WINDOW_HEIGHT = 720;
+
+
 }

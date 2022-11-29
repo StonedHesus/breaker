@@ -71,16 +71,21 @@ public class Breaker extends Application implements Settings {
 
         this.mainLoop = new AnimationTimer() {
 
+            long last = 0;
             @Override
             public void handle(long now) {
 
+                if (last == 0) { // ignore the first tick, just compute the first deltaT
+                    last = now;
+                    return;
+                }
 
                 Scene scene = primaryStage.getScene();
 
                 if(scene instanceof breaker.game.scenes.model.Scene)
-                    ((breaker.game.scenes.model.Scene) scene).tick();
+                    ((breaker.game.scenes.model.Scene) scene).tick((now - last) * 1.0e-9);
 
-
+                last = now;
             }
         };
 

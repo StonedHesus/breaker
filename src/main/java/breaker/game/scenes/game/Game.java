@@ -1,6 +1,7 @@
 // The package in which the current Java compilation unit is to be found.
 package breaker.game.scenes.game;
 // Imports from existing Java libraries, classes and interfaces.
+import breaker.game.components.ball.Ball;
 import javafx.application.Application;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
@@ -15,19 +16,27 @@ import breaker.game.scenes.model.Scene;
 import breaker.game.breaker.Breaker;
 import breaker.game.components.paddle.Paddle;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 
 /**
  * @author Andrei-Paul Ionescu
  */
 public class Game extends Scene {
     // Static values/constants of the class.
+    private static final HashSet<KeyCode> inputMap = new HashSet<>();
 
     // Fields/attributes of the class.
     private final Paddle paddle;
 
+    private final Ball ball;
+
+
     // Instance-side initialisation block.
     {
         this.paddle = Paddle.newDefault();
+        this.ball   = Ball.newDefault();
     }
 
     // Constructor(s) of the class.
@@ -40,9 +49,11 @@ public class Game extends Scene {
     // Setters of the class.
 
     // Public non-static methods of the unit.
+    private static int I = 1;
     @Override
-    public void tick (){
-        paddle.collidesWithScreenBounds();
+    public void tick (double deltaTime) {
+        inputMap.forEach(this.paddle::move);
+        this.ball.update(deltaTime);
     }
 
     // Public static methods of the unit.
@@ -56,9 +67,11 @@ public class Game extends Scene {
         ObservableList<Node> children = rootGroup.getChildren();
 
         children.add(game.paddle.getGraphics());
+        children.add(game.ball.getGraphics());
         game.setFill(Color.WHITE);
 
-        game.setOnKeyPressed(event -> game.paddle.move(event.getCode()));
+        game.setOnKeyPressed(event -> inputMap.add(event.getCode()));
+        game.setOnKeyReleased(event -> inputMap.remove(event.getCode()));
 
         return game;
     }

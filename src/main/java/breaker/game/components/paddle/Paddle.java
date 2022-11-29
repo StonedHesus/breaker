@@ -16,7 +16,7 @@ import javafx.scene.shape.Rectangle;
 public class Paddle extends GameObject implements Settings {
 
     // Static values/constants of the class.
-    private static double SPEED = 5.0;
+    private static double SPEED = 6.0;
 
     // Fields/attributes of the class.
     private Rectangle graphics;
@@ -25,7 +25,7 @@ public class Paddle extends GameObject implements Settings {
     private double deltaX;
 
     // Constructor(s) of the class.
-    Paddle(){
+    private Paddle(){
 
         this.graphics = new Rectangle(DEFAULT_PADDLE_WIDTH, DEFAULT_PADDLE_HEIGHT);
         this.graphics.setFill(DEFAULT_PADDLE_COLOUR);
@@ -39,8 +39,8 @@ public class Paddle extends GameObject implements Settings {
         this.graphics.setX(this.coordinates.getX());
         this.graphics.setY(this.coordinates.getY());
 
-        this.graphics.setArcWidth(30);
-        this.graphics.setArcHeight(20);
+        this.graphics.setArcWidth(DEFAULT_ARC_WIDTH);
+        this.graphics.setArcHeight(DEFAULT_ARC_HEIGHT);
 
         this.deltaX = 0;
     }
@@ -60,23 +60,22 @@ public class Paddle extends GameObject implements Settings {
 
     public void reset() {this.deltaX = 0;}
     public void move(KeyCode keyCode){
-        if(keyCode == KeyCode.A)
+
+        if(keyCode == KeyCode.A && !this.isCollidingWithLeftBoundary())
             this.graphics.setX(this.graphics.getX() - SPEED);
 
-        if(keyCode == KeyCode.D)
+
+        if(keyCode == KeyCode.D && !this.isCollidingWithRightBoundary())
             this.graphics.setX(this.graphics.getX() + SPEED);
+
     }
 
     @Override
     public void draw(Pane target) {target.getChildren().add(this.graphics);}
 
     @Override
-    @Deprecated
     public void update(double deltaTime) {
 
-        this.coordinates.add(this.deltaX * deltaTime, 0);
-        this.graphics.setX(this.coordinates.getX());
-        this.deltaX = 0;
     }
 
 
